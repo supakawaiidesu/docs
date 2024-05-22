@@ -1,0 +1,32 @@
+---
+title: 'Oracle MEV Protection'
+description: 'What is Oracle MEV Protection?'
+icon: 'shield'
+---
+
+## Oracle MEV Protection
+
+Oracle MEV (Miner Extractable Value) refers to the profit that can be extracted by malicious actors through the manipulation of oracle data. This typically occurs when there is a time delay between the update of oracle data and the execution of transactions on the blockchain. Malicious actors can exploit this delay to gain an unfair advantage, such as frontrunning or executing arbitrage trades based on stale prices.
+
+### Understanding Oracle MEV
+
+- **Frontrunning:** This is a type of MEV where an attacker observes a pending transaction that will affect the price of an asset and then places their own transaction ahead of the original one to profit from the expected price change.
+  
+- **Latency Arbitrage:** This occurs when there is a delay between the time an oracle updates its data and when this updated data is available on the blockchain. Malicious actors can take advantage of this latency to execute trades based on outdated prices, potentially causing losses for honest traders.
+
+### The Need for Protection
+
+Oracle MEV can have several negative consequences:
+
+- **Unfair Market Conditions:** Oracle MEV creates an uneven playing field where malicious actors can exploit their knowledge of pending transactions or delays in oracle updates to gain an unfair advantage over regular users.
+  
+- **Increased Costs:** To mitigate the risks of MEV, users and protocols may need to increase transaction fees to ensure their transactions are prioritized, leading to higher overall costs.
+  
+- **Reduced Trust:** If users believe that the trading environment is unfair or subject to manipulation, they may lose trust in the protocol and migrate to other platforms.
+
+### Molten's Approach to Oracle MEV Protection
+
+To counteract these issues, Molten has implemented several strategies to protect against oracle MEV, ensuring that trades are executed fairly and transparently. This includes forcefully updating oracles before executing trade transactions, guaranteeing the use of the latest price information, and utilizing low latency to prevent arbitrage opportunities.
+
+Molten's comprehensive approach ensures a secure, fair, and efficient trading environment, safeguarding the interests of all participants.
+

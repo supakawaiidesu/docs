@@ -1,0 +1,29 @@
+---
+title: 'How Does Molten Work?'
+description: 'Understanding the mechanisms behind Molten'
+icon: 'gear'
+---
+
+## How Does Molten Work?
+
+Molten utilizes advanced mechanisms to prevent oracle MEV (Miner Extractable Value) and ensure a secure, fair trading environment for all users.
+
+### Oracle MEV Protection
+
+Oracle MEV occurs when malicious actors exploit the time delay between oracle updates and on-chain transactions to gain an unfair advantage. Molten's rollup sequencers are designed to mitigate this risk through several key strategies:
+
+1. **Forceful Oracle Updates:** As a transaction comes in, the sequencer forcefully updates the oracles (if supported) and ensures that these oracle transactions are executed first before any trade transactions. This guarantees that trades are executed with the latest price updates.
+
+2. **Latest Price Guarantee:** By executing oracle updates before trade transactions, Molten ensures that any trade attempting to take advantage of oracle MEV will always use the most recent price information. This prevents malicious actors from exploiting outdated oracle data.
+
+3. **Low Latency:** Molten's chain has a low 250ms block time latency, enabling oracle feeds to update rapidly. This quick update cycle prevents latency arbitrage between centralized exchanges (CEXs) and the Molten network.
+
+4. **Network-Wide Oracle Updates:** Instead of relying on a keeper system per protocol, Molten implements a network-wide oracle update mechanism. This centralized approach ensures consistent and timely updates across all protocols, protecting against bad actors and ensuring fair trading conditions.
+
+### Benefits for Users and Protocols
+
+- **Faster Trades:** Users experience faster trade execution with the latest price updates, enhancing the efficiency of the trading environment.
+- **Lower Fees:** Reduced need for high fees to secure priority in transaction processing, resulting in cost savings for users and protocols.
+- **Increased Profits:** Liquidity providers and other participants benefit from a fairer market, leading to higher potential profits.
+
+Molten's approach to preventing oracle MEV sets it apart from other rollup solutions, providing a secure, efficient, and fair trading platform for all participants.

@@ -1,0 +1,52 @@
+---
+title: 'Anytrust DA'
+description: 'How Molten Network utilizes Anytrust DA'
+icon: 'database'
+---
+
+## Anytrust DA
+
+Molten Network leverages Anytrust DA (Data Availability) technology to reduce costs and enhance scalability while maintaining a high level of security. This section explains the technical workings of Anytrust DA and its benefits for the Molten Network.
+
+### What is Anytrust DA?
+
+Anytrust DA is a variant of Arbitrum Nitro technology that lowers costs by making a mild trust assumption. It relies on an external Data Availability Committee (DAC) to store data and ensure its availability, rather than posting all data on the L1 Ethereum chain.
+
+### Key Concepts
+
+- **Data Availability Committee (DAC):** The DAC consists of multiple members, of which at least two are assumed to be honest. This assumption ensures that the data will always be available when needed.
+  
+- **Keysets:** A Keyset specifies the public keys of the DAC members and the number of signatures required for a Data Availability Certificate (DACert) to be valid. Keysets allow for dynamic changes in DAC membership and key management.
+
+- **Data Availability Certificates (DACerts):** A DACert contains the hash of a data block, an expiration time, and proof that a sufficient number of DAC members have signed the data block. This guarantees that the data will be available until the expiration time.
+
+### How Anytrust DA Works
+
+1. **Data Submission:** When the Molten sequencer produces a data batch, it sends the data, along with an expiration time, to all DAC members. Each member stores the data and signs a (hash, expiration time) pair.
+
+2. **Certificate Creation:** Once the sequencer collects enough signatures, it aggregates them to create a DACert. This DACert is then posted to the L1 inbox contract, making it available to the L2 chain.
+
+3. **Data Verification:** The L2 chain verifies the DACert by checking the signatures against the Keyset, ensuring the data is available and valid. If the DACert is invalid or not available, the sequencer can fall back to posting the full data directly to L1.
+
+### Technical Benefits for Molten Network
+
+- **Cost Efficiency:** By using DACerts, Molten significantly reduces the gas costs associated with posting data on L1. This makes transactions more affordable and scalable.
+  
+- **Scalability:** Anytrust DA allows Molten to handle a higher volume of transactions without compromising on data availability or security.
+
+- **Flexibility:** The use of Keysets allows for dynamic changes in DAC membership and key management, ensuring the system can adapt to new requirements and challenges.
+
+### Sequencer-Committee Interaction
+
+- **Data Submission:** The Molten sequencer sends data batches to DAC members using the Sequencer API, which is a JSON-RPC interface. Each member stores the data and returns a signed (hash, expiration time) pair.
+
+- **Certificate Aggregation:** Once enough signatures are collected, the sequencer aggregates them into a DACert and posts it to the L1 inbox contract.
+
+- **Fallback Mechanism:** If the sequencer cannot collect enough signatures, it falls back to posting the full data directly on L1, ensuring data availability regardless of DAC performance.
+
+### Summary
+
+Molten Network’s use of Anytrust DA technology enables it to offer low-cost, scalable transactions while maintaining high security and data availability. This integration ensures that Molten can provide a robust and efficient trading platform for its users and protocols.
+
+For more detailed information on Anytrust DA, visit the [Arbitrum documentation](https://developer.arbitrum.io/).
+

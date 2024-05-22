@@ -2,90 +2,95 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Starter Kit",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/logo.png",
+    "light": "/logo/logo.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
-    "primary": "#0D9373",
-    "light": "#07C983",
-    "dark": "#0D9373",
+    "primary": "#ff731a",
+    "light": "#ed5940",
+    "dark": "#ff731a",
     "anchors": {
-      "from": "#0D9373",
-      "to": "#07C983"
+      "from": "#ee0e70",
+      "to": "#fb6404"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "discord.gg/moltennetwork"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Dashboard Hub",
+    "url": "https://molten.hub.caldera.xyz/"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "api-reference"
-    }
-  ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "name": "Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/moltennetwork"
     },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://mirror.xyz/moltennetwork.eth"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Introduction",
+      "pages": ["introduction"]
+    },
+    {
+      "group": "Molten Network",
       "pages": [
-        "introduction",
-        "quickstart",
-        "development"
+        "moltennetwork/intro",
+        "moltennetwork/tokenonmics",
+        "moltennetwork/oev",
+        "moltennetwork/gas",
+        "moltennetwork/oracles"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Orbit Stack",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "orbit/basic",
+        "orbit/stylus",
+        "orbit/celestia"
       ]
     },
     {
-      "group": "API Documentation",
+      "group": "Molten Mainnet",
       "pages": [
-        "api-reference/introduction"
+        "mainnet/connect",
+        "mainnet/bridge",
+        "mainnet/ecosystem"
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Molten Economy",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "economy/utility",
+        "economy/model",
+        "economy/grants",
+        "economy/esmolten",
+        "economy/ecosystem"
+      ]
+    },
+    {
+      "group": "Molten Network Ecosystem",
+      "pages": [
+        "ecosystem/unidex",
+        "ecosystem/caldera",
+        "ecosystem/ponder",
+        "ecosystem/arbitrum"
       ]
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "x": "https://x.com/moltenl3",
+    "github": "https://github.com/unidexfinance",
+    "discord": "https://discord.gg/moltennetwork"
   }
 }

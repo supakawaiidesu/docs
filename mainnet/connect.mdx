@@ -1,0 +1,53 @@
+---
+title: 'RPC Information'
+description: 'How to connect to and use Molten Network'
+icon: 'network'
+---
+
+## RPC Information
+
+This section provides the necessary details for connecting to and using Molten Network. These details can be used to configure web3 wallets such as Metamask, Rabby Wallet, or any other web3-compatible wallet. Additionally, developers can use this information to connect their backend and frontend applications to the Molten Network.
+
+### Connection Details
+
+| Name              | Value                                   |
+| ----------------- | --------------------------------------- |
+| Network Name      | `Molten Network`                        |
+| Description       | `Molten Mainnet`                        |
+| RPC Endpoint      | `https://molten.calderachain.xyz/http`  |
+| WSS Endpoint      | `wss://molten.calderachain.xyz/ws`      |
+| Chain ID          | `360`                                   |
+| Currency Symbol   | `MOLTEN`                                |
+| Block Explorer    | `https://molten.bridge.caldera.xyz/`    |
+| Bridge            | `https://molten.bridge.caldera.xyz/`    |
+
+### Adding Molten Network to Metamask
+
+To add Molten Network to your Metamask wallet, follow these steps:
+
+1. Open Metamask and click on the network dropdown at the top of the window.
+2. Select "Add Network" to open the network settings.
+3. Enter the following details:
+
+    - **Network Name:** Molten Network
+    - **RPC URL:** https://molten.calderachain.xyz/http
+    - **Chain ID:** 360
+    - **Currency Symbol:** MOLTEN
+    - **Block Explorer URL:** https://molten.bridge.caldera.xyz/
+
+4. Click "Save" to add the Molten Network to your Metamask wallet.
+
+### Using Molten Network in Applications
+
+To connect your application to the Molten Network, you can use the provided RPC and WSS endpoints. Here is an example of how to configure a web3 provider in a JavaScript application:
+
+```javascript
+const Web3 = require('web3');
+
+// HTTP Provider
+const httpProvider = new Web3.providers.HttpProvider('https://molten.calderachain.xyz/http');
+const web3 = new Web3(httpProvider);
+
+// WebSocket Provider
+const wsProvider = new Web3.providers.WebsocketProvider('wss://molten.calderachain.xyz/ws');
+const web3Ws = new Web3(wsProvider);
