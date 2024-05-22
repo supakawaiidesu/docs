@@ -49,7 +49,11 @@
         "moltennetwork/tokenonmics",
         "moltennetwork/oev",
         "moltennetwork/gas",
-        "moltennetwork/oracles"
+        "moltennetwork/oracles",
+        {
+          "group": "Key Concepts",
+          "pages": ["moltennetwork/transaction-lifecycle", "moltennetwork/Gas-markets", "moltennetwork/ArbOS", "moltennetwork/Fraudproofs", "moltennetwork/AnyTrust"]
+      }
       ]
     },
     {

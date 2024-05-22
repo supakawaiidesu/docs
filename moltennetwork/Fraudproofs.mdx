@@ -1,0 +1,56 @@
+---
+title: 'Fraud Proofs'
+description: 'Understanding fraud proofs in the Molten Network'
+icon: 'shield-alt'
+---
+
+## Fraud Proofs
+
+The Molten Network employs a sophisticated fraud proof system to ensure the integrity and correctness of transactions and state transitions. This section explains the challenge manager, block challenge, execution challenge, general bisection protocol, winning the challenge, and one-step proof assumptions.
+
+### ChallengeManager
+
+The ChallengeManager arbitrates challenge games to resolve disputes between validators.
+
+#### Block Challenge
+
+The challenge begins by bisecting over global states (including block hashes). Before actual machine execution is disputed, the dispute is narrowed down to an individual block. Once the challenge has been bisected down to an individual block, `challengeExecution` can be called by the current responder. This operates similarly to a bisection in that the responder must provide a competing global state and machine state, but it uses that information to transition to the execution challenge phase.
+
+#### Execution Challenge
+
+Once narrowed down to an individual block, the actual machine execution can be bisected. Once the execution has been bisected down to an individual step, `oneStepProveExecution` can be called by the current responder. The current responder must provide proof data to execute a step of the machine. If executing that step ends in a different state than was previously asserted, the current responder wins the challenge.
+
+### General Bisection Protocol
+
+Note: the term bisection in this document is used for clarity but refers to a dissection of any degree.
+
+The ChallengeLib helper library contains a `hashChallengeState` method which hashes a list of segment hashes, a start position, and a total segments length, generating the `ChallengeLib.Challenge`'s `challengeStateHash`. This information infers the position of each segment hash. The challenge "degree" refers to the number of segment hashes minus one. The distance (in steps) between one segment and the next is `floor(segmentsLength / degree)`, except for the last pair of segments, where `segmentsLength % degree` is added to the normal distance, so that the total distance is `segmentsLength`.
+
+A challenge begins with only two segments (a degree of one), which is the asserter's initial assertion. Then, the bisection game begins on the challenger's turn. In each round of the game, the current responder must choose an adjacent pair of segments to challenge. By doing so, they dispute their opponent's claim that starting with the first segment and executing for the specified distance (number of steps) will result in the second segment. At this point, the two parties agree on the correctness of the first segment but disagree about the correctness of the second segment. The responder must provide a bisection with a start segment equal to the first segment, but an end segment different from the second segment. In doing so, they break the challenge down into smaller distances, and it becomes their opponent's turn. Each bisection must have a degree of `min(40, numStepsInChallengedSegment)`, ensuring the challenge makes progress.
+
+A segment with a length of only one step cannot be bisected. What happens there is specific to the phase of the challenge, as either a `challengeExecution` or `oneStepProveExecution`.
+
+Note that unlike in a traditional bisection protocol, where one party proposes segments and the other decides which to challenge, this protocol is symmetric in that both players take turns deciding where to challenge and proposing bisections when challenging.
+
+### Winning the Challenge
+
+Winning the challenge isn't instant. Instead, it makes the current responder the winner's opponent and sets the state hash to 0. In that state, the party does not have any valid moves, so it will eventually lose by timeout. This precaution allows time to diagnose and fix errors with a contract upgrade if a challenge is resolved incorrectly.
+
+### One Step Proof Assumptions
+
+The One Step Proof (OSP) implementation makes certain assumptions about the cases that can arise in correct execution.
+
+- **Unreachable Cases:** If a case is "unreachable" (assumed never to arise in correct execution), the OSP can implement any instruction semantics in that case. In a challenge between malicious parties, any case can arise. The challenge protocol must do something safe in every case, but the instruction semantics can be unusual.
+
+- **Honest Party Assumptions:** In a challenge with one honest party, the honest party will never need to one-step prove an unreachable case. The dishonest party could assert an execution that transitions into an unreachable case, but such an execution must include an invalid execution of a reachable case earlier in the assertion. The eventual OSP will be over the earlier point of divergence, not the later execution from an unreachable case.
+
+- **Detectable Unreachable Cases:** For safety, detectable unreachable cases should transition the machine into an error state, allowing governance to push an upgrade to recover from the error. An undetectable unreachable case could lead to a security failure.
+
+The following assumptions must prevent an unreachable case from arising in correct execution:
+
+1. **Valid WAVM Code:** WAVM code generated by Arbitrator from valid WASM is assumed never to encounter an unreachable case.
+2. **Inbox Message Size:** Inbox messages must not be too large to prevent them from being supplied for proving, currently limited to 117,964 bytes.
+3. **Known and Small Preimages:** Requested preimages must be known and not too large, currently limited to 117,964 bytes.
+
+By adhering to these assumptions, the Molten Network ensures that unreachable cases do not arise in correct execution, maintaining the integrity and security of the system.
+

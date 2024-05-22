@@ -1,0 +1,69 @@
+---
+title: 'Transaction Life Cycle'
+description: 'Understanding the life cycle of a Molten transaction'
+icon: 'dollar-sign'
+---
+
+## Transaction Life Cycle
+
+The life cycle of a Molten transaction involves several phases, from the initial creation and submission to its final confirmation on Layer 2 (L2). This overview explains each step in detail, providing insight into the various components and guarantees involved in the process.
+
+### Overview: The Lifecycle of a Molten Transaction
+
+As an introduction to the various components that compose the Molten protocol, we'll go step-by-step over the phases a Molten transaction goes through, starting with a client creating a signed transaction, to it ultimately being confirmed back on layer 2 (L2).
+
+We'll also intersperse it with "finality checks," explaining what guarantees the client has over their transaction's finality (i.e., assurances that their transaction's result is guaranteed and won't later be altered) over the course of a transaction's various stages.
+
+### 1. Sequencer Receives Transaction
+Typically, a transaction's lifecycle starts with the Sequencer, the entity designated with transaction ordering, receiving a transaction from a client. The Sequencer can receive a transaction in one of two ways:
+
+#### 1a. Directly / Offchain
+For typical transacting within the L3 environment (i.e., using an L3 native dapp), a client will connect their wallet to an L3 node and directly deliver a signed transaction.
+
+#### 1b. From L2 (via the Delayed Inbox)
+Alternatively, a client can send a message to the Sequencer by signing and publishing an L2 transaction in the Molten chain's Delayed Inbox. This functionality is most commonly used for depositing ETH or tokens via a bridge.
+
+### 2. Sequencer Orders Transaction (Off-Chain)
+Upon receiving a transaction, the Sequencer will:
+- Order it in its off-chain Inbox.
+- Locally execute it using the Molten Nitro VM (including collecting/allocating L2 and L3 fees, etc.).
+- "Instantly" give a transaction receipt to the client ("instant" in that it doesn't require any additional on-chain confirmations, and typically takes less than a second - with the average user experiencing ~260ms).
+
+> **FINALITY CHECK: Trusted / Soft Confirmation**
+> At this phase, the client's acceptance of finality relies on trusting the Sequencer. A malicious/faulty Sequencer could deviate between what it promised in the transaction receipt and what is ultimately published in a batch.
+
+**NOTE:** Even a malicious/faulty Sequencer can only, at worst, reorder or temporarily delay transactions; it cannot, e.g., forge a client's transaction or propose an invalid state update.
+
+### 3. Sequencer Posts Transaction in a Batch (On-Chain)
+The Sequencer will eventually post a batch of L3 transactions, which includes our client's transaction onto the underlying L2 (as calldata); under normal conditions, the Sequencer will post batches every few minutes.
+
+#### 3a. What if the Sequencer Never Includes Our Transaction?
+Even if the Sequencer never includes our transaction in a batch, the client can include it in the L3 by posting in the delayed inbox and then "force including" it after some delay period (currently ~24 hours on Molten).
+
+**NOTE:** The Sequencer is forced to include messages from the delayed Inbox in the queued order that they appear on-chain, i.e., it processes messages using the "first in, first out" method.
+
+> **FINALITY CHECK: Ethereum-Equivalent Finality!**
+> At this stage, assuming that a client believes there to be at least one well-behaved active Molten validator, the client can treat their transaction's finality as equivalent to an ordinary Ethereum transaction. In other words, their L3 transaction has the same finality as the L2 transaction that recorded it in a batch.
+
+### 4. Validator Asserts RBlock That Includes Transaction
+A staked, active validator will then run the Molten VM over the inputs in the Inbox (just like the Sequencer did earlier, except now only over transactions posted on L2) and make an on-chain assertion about the chain's latest state, i.e., a rollup block or "RBlock." RBlocks typically get asserted every 30-60 minutes.
+
+#### 4a. RBlock is Valid / Goes Unchallenged
+In the happy/common case, the validator asserted a valid RBlock, and over the course of the dispute window — 1 week on Molten — no other validators challenge it.
+
+#### 4b. Assertion is Challenged
+If two validators assert different RBlocks, only (at most) one of them can be valid, so they are put into a dispute.
+
+A dispute consists of two staked validators dissecting their disagreement down to a single L3 block, and then dissecting the sequence of VM instructions within this block down to a single OPCODE, then finally, executing this single operation. This is all refereed by contracts on L2.
+
+> **FINALITY CHECK: STILL THE SAME Ethereum-Equivalent Finality!**
+> Even during a dispute, Molten nodes continue to execute, and active validators continue to make assertions on the valid leaf in the state-tree; nothing that can happen in phase 4 has any effect on the L2-level finality we've already locked in at phase 3.
+
+### 5. RBlock is Confirmed on L2
+Once any and all disputes have been resolved and sufficient time has passed, our RBlock can be confirmed on L2 (any Ethereum account on L2 can confirm it). Upon confirmation, the Outbox root on L2 gets updated.
+
+> **FINALITY CHECK: L3-to-L2 Messages Executable on L2**
+> If our client's transaction didn't include any L3-to-L2 messages (e.g., withdrawals), phase 5 has no material effect on their transaction. If it did include an L3-to-L2 transaction, it is only after confirmation that the message can be executed in the Outbox on L2.
+
+**NOTE:** Even before phase 5, the client has L2 finality on the result of their L3-to-L2 message, they just can't execute it yet; i.e., they have a guarantee that they'll eventually be able to, e.g., finalize their withdrawal, they just can't claim their funds on L2 until the RBlock is confirmed.
+
