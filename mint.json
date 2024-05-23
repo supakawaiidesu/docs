@@ -53,7 +53,11 @@
         {
           "group": "Key Concepts",
           "pages": ["moltennetwork/transaction-lifecycle", "moltennetwork/Gas-markets", "moltennetwork/ArbOS", "moltennetwork/Fraudproofs", "moltennetwork/AnyTrust"]
-      }
+      },
+      {
+        "group": "Build on Molten",
+        "pages": ["build/quickstart", "build/moltenoracle"]
+    }
       ]
     },
     {

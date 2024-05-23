@@ -1,0 +1,26 @@
+---
+title: 'Quick Start Guide'
+description: 'Getting started with building on the Molten Network'
+icon: 'rocket'
+---
+
+## Quick Start Guide for Building on Molten
+
+This guide is designed for users and developers interested in understanding how gas operates in the Molten Network, how it's calculated, and how to estimate it before submitting transactions. More detailed information about these calculations can be found on the Gas and Fees page.
+
+### Estimating Gas on Molten
+
+To estimate gas for your transaction, you can rely on the standard gas estimation process. This can be achieved by calling a Molten node's `eth_estimateGas`, which provides a value (gas limit) that should sufficiently cover the entire transaction fee at the specified L3 gas price.
+
+Multiplying the value obtained from `eth_estimateGas` by the L3 gas price will give you the total amount of MOLTEN required for the transaction to be successful. It's important to note that, for a specific operation, the result of `eth_estimateGas` value may vary over time due to fluctuations in the L2 calldata price.
+
+Alternatively, to obtain the gas limit for your transaction, you can call `NodeInterface.gasEstimateComponents()` and then use the first result, which is `gasEstimate`. Next, to find the total cost, you need to multiply this amount by the L3 gas price, which is available in the third result, `baseFee`.
+
+Note that when working with L2 to L3 messages (also known as retryable tickets), you can use the function `L2ToL3MessageGasEstimator.estimateAll()` of the Molten SDK or `NodeInterface.estimateRetryableTicket()` to get all the gas information needed to send a successful transaction.
+
+### Breaking Down the Formula
+
+The transaction fees to pay at any given moment are the result of the following product:
+
+```markdown
+Transaction fees (TXFEES) = L3 Gas Price (P) * Gas Limit (G)
