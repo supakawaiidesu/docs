@@ -56,7 +56,7 @@
       },
       {
         "group": "Build on Molten",
-        "pages": ["build/quickstart", "build/moltenoracle"]
+        "pages": ["build/quickstart", "build/moltenoracle", "build/diff"]
     }
       ]
     },

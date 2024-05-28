@@ -1,59 +1,152 @@
 ---
-title: 'Molten Network Ecosystem'
-description: 'Explore the dapps available on the Molten Network'
-icon: 'app-store'
+title: 'Molten Oracle'
+description: 'Understanding and interacting with the Molten Oracle'
+icon: 'data'
 ---
 
-## Molten Network Ecosystem
+## Molten Oracle
 
-The Molten Network hosts a growing ecosystem of decentralized applications (dapps) designed to leverage its high-speed, low-cost, and secure infrastructure. Currently, the primary product available on the network is the UniDex perp aggregator.
+The Molten Oracle is a crucial component deployed by the Molten Network team. It provides reliable and up-to-date price feeds for various products, enabling secure and efficient operations within the ecosystem. This page details how to interact with the Molten Oracle and utilize its functions.
 
-### UniDex Perp Aggregator
+### Key Concepts
 
-UniDex is a perpetual protocol deployed on the Molten Network using Molten Oracles to achieve instant updates and OEV protection. The protocol features a USDC pool that traders can use to open leveraged positions on various assets, including ETH, BTC, EUR/USD, and tokens like DOGE.
+- **Product Identification:** All products are defined by strings converted to bytes32. For example, the price feed product for BTC-USD is represented as `0x4254432d55534400000000000000000000000000000000000000000000000000`, which is the string "BTC-USD" converted to bytes32.
 
-![UniDex](https://mintlify.s3-us-west-1.amazonaws.com/unidex/images/home-featured-image.png)
+### Contract Address
 
-#### Key Features
+The Molten Oracle contract is deployed at the following address:
 
-- **Instant Updates:** Utilizes Molten Oracles for real-time price updates, ensuring accurate and up-to-date information for traders.
-- **OEV Protection:** Benefits from Molten Network's oracle MEV protection, preventing frontrunning and other exploitative behaviors.
-- **Diverse Trading Options:** Supports leveraged trading on a variety of assets, providing traders with multiple opportunities to engage in the market.
+`0xb664C19af8eebc491cc5792aB146D34047343Bea`
 
-### Quick Links
+### Functions
 
-<CardGroup cols={2}>
-  <Card
-    title="UniDex Discord"
-    icon="Discord"
-    href="https://discord.gg/unidex"
-  >
-    Join the community on discord and get access to beta features
-  </Card>
-  <Card
-    title="Molten Discord"
-    icon="Discord"
-    href="https://discord.gg/unidex"
-  >
-    Join the molten community on discord and stay updated
-  </Card>
-  <Card
-    title="Swap App"
-    icon="money-bill-wheat"
-    href="https://app.unidex.exchange/"
-  >
-    Swap with high confidence due to our aggregation strategy
-  </Card>
-  <Card
-    title="Perps Trading"
-    icon="chart-line"
-    href="https://leverage.unidex.exchange/"
-  >
-    Place and manage aggregated perp trades with ease
-  </Card>
-</CardGroup>
+#### `getPair`
 
-### Future Expansion
+This function returns the product name, the price, and the timestamp of the last price update.
 
-As the Molten Network continues to grow, more dapps will be deployed, enhancing the ecosystem and providing users with a wide range of decentralized services and applications. Stay tuned for updates and new releases.
+- **Parameters:**
+  - `bytes32 product`: The bytes32 representation of the product string.
 
+- **Returns:**
+  - `string productName`: The name of the product.
+  - `uint256 price`: The price of the product.
+  - `uint256 timestamp`: The timestamp of the last price update.
+
+- **Example Usage:**
+
+```javascript
+const product = "0x4254432d55534400000000000000000000000000000000000000000000000000"; // BTC-USD in bytes32
+const result = await moltenOracle.getPair(product);
+
+const productName = result[0];
+const price = result[1];
+const timestamp = result[2];
+
+console.log(`Product: ${productName}, Price: ${price}, Last Updated: ${timestamp}`);
+```
+
+#### `prices`
+
+This function returns only the price of the specified product.
+
+- **Parameters:**
+  - `bytes32 product`: The bytes32 representation of the product string.
+
+- **Returns:**
+  - `uint256 price`: The price of the product.
+
+- **Example Usage:**
+
+```javascript
+const product = "0x4254432d55534400000000000000000000000000000000000000000000000000"; // BTC-USD in bytes32
+const price = await moltenOracle.prices(product);
+
+console.log(`Price: ${price}`);
+```
+
+## Available Feeds
+
+Below is a list of all available feeds in the Molten Oracle:
+
+| Feed          | Bytes32 Conversion                                                         |
+|---------------|----------------------------------------------------------------------------|
+| BTC-USD       | 0x4254432d55534400000000000000000000000000000000000000000000000000         |
+| ETH-USD       | 0x4554482d55534400000000000000000000000000000000000000000000000000         |
+| ARB-USD       | 0x4152422d55534400000000000000000000000000000000000000000000000000         |
+| SOL-USD       | 0x534f4c2d55534400000000000000000000000000000000000000000000000000         |
+| ADA-USD       | 0x4144412d55534400000000000000000000000000000000000000000000000000         |
+| OP-USD        | 0x4f502d5553440000000000000000000000000000000000000000000000000000         |
+| 1INCH-USD     | 0x31494e43482d5553440000000000000000000000000000000000000000000000         |
+| AAVE-USD      | 0x414156452d555344000000000000000000000000000000000000000000000000         |
+| ALGO-USD      | 0x414c474f2d555344000000000000000000000000000000000000000000000000         |
+| BEAM-USD      | 0x4245414d2d555344000000000000000000000000000000000000000000000000         |
+| BONK-USD      | 0x424f4e4b2d555344000000000000000000000000000000000000000000000000         |
+| CANTO-USD     | 0x43414e544f2d5553440000000000000000000000000000000000000000000000         |
+| CRV-USD       | 0x4352562d55534400000000000000000000000000000000000000000000000000         |
+| DOGE-USD      | 0x444f47452d555344000000000000000000000000000000000000000000000000         |
+| DYDX-USD      | 0x445944582d555344000000000000000000000000000000000000000000000000         |
+| DYM-USD       | 0x44594d2d55534400000000000000000000000000000000000000000000000000         |
+| ENA-USD       | 0x454e412d55534400000000000000000000000000000000000000000000000000         |
+| ENS-USD       | 0x454e532d55534400000000000000000000000000000000000000000000000000         |
+| EOS-USD       | 0x454f532d55534400000000000000000000000000000000000000000000000000         |
+| EVMOS-USD     | 0x45564d4f532d5553440000000000000000000000000000000000000000000000         |
+| FTM-USD       | 0x46544d2d55534400000000000000000000000000000000000000000000000000         |
+| FLOKI-USD     | 0x464c4f4b492d5553440000000000000000000000000000000000000000000000         |
+| FXS-USD       | 0x4658532d55534400000000000000000000000000000000000000000000000000         |
+| GMX-USD       | 0x474d582d55534400000000000000000000000000000000000000000000000000         |
+| GNS-USD       | 0x474e532d55534400000000000000000000000000000000000000000000000000         |
+| GRAIL-USD     | 0x475241494c2d5553440000000000000000000000000000000000000000000000         |
+| GRT-USD       | 0x4752542d55534400000000000000000000000000000000000000000000000000         |
+| INJ-USD       | 0x494e4a2d55534400000000000000000000000000000000000000000000000000         |
+| ICP-USD       | 0x4943502d55534400000000000000000000000000000000000000000000000000         |
+| JOE-USD       | 0x4a4f452d55534400000000000000000000000000000000000000000000000000         |
+| JUP-USD       | 0x4a55502d55534400000000000000000000000000000000000000000000000000         |
+| KAVA-USD      | 0x4b4156412d555344000000000000000000000000000000000000000000000000         |
+| KCS-USD       | 0x4b43532d55534400000000000000000000000000000000000000000000000000         |
+| LDO-USD       | 0x4c444f2d55534400000000000000000000000000000000000000000000000000         |
+| LINK-USD      | 0x4c494e4b2d555344000000000000000000000000000000000000000000000000         |
+| LTC-USD       | 0x4c54432d55534400000000000000000000000000000000000000000000000000         |
+| MATIC-USD     | 0x4d415449432d5553440000000000000000000000000000000000000000000000         |
+| MANTA-USD     | 0x4d414e54412d5553440000000000000000000000000000000000000000000000         |
+| METIS-USD     | 0x4d455449532d5553440000000000000000000000000000000000000000000000         |
+| MNT-USD       | 0x4d4e542d55534400000000000000000000000000000000000000000000000000         |
+| NEAR-USD          | 0x4e4541522d55534400000000000000000000000000000000000000000000000000       |
+| PENDLE-USD        | 0x50454e444c452d5553440000000000000000000000000000000000000000000000       |
+| PEPE-USD          | 0x504550452d55534400000000000000000000000000000000000000000000000000       |
+| PYTH-USD          | 0x505954482d55534400000000000000000000000000000000000000000000000000       |
+| RAY-USD           | 0x5241592d55534400000000000000000000000000000000000000000000000000         |
+| RDNT-USD          | 0x52444e542d55534400000000000000000000000000000000000000000000000000       |
+| RLB-USD           | 0x524c422d55534400000000000000000000000000000000000000000000000000         |
+| RNDR-USD          | 0x524e44522d55534400000000000000000000000000000000000000000000000000       |
+| SEI-USD           | 0x5345492d55534400000000000000000000000000000000000000000000000000         |
+| SNX-USD           | 0x534e582d55534400000000000000000000000000000000000000000000000000         |
+| STX-USD           | 0x5354582d55534400000000000000000000000000000000000000000000000000         |
+| SUI-USD           | 0x5355492d55534400000000000000000000000000000000000000000000000000         |
+| SUSHI-USD         | 0x53555348492d5553440000000000000000000000000000000000000000000000         |
+| TAO-USD           | 0x54414f2d55534400000000000000000000000000000000000000000000000000         |
+| TIA-USD           | 0x5449412d55534400000000000000000000000000000000000000000000000000         |
+| TON-USD           | 0x544f4e2d55534400000000000000000000000000000000000000000000000000         |
+| TRX-USD           | 0x5452582d55534400000000000000000000000000000000000000000000000000         |
+| UNI-USD           | 0x554e492d55534400000000000000000000000000000000000000000000000000         |
+| W-USD             | 0x572d555344000000000000000000000000000000000000000000000000000000         |
+| WLD-USD           | 0x574c442d55534400000000000000000000000000000000000000000000000000         |
+| WIF-USD           | 0x5749462d55534400000000000000000000000000000000000000000000000000         |
+| WOO-USD           | 0x574f4f2d55534400000000000000000000000000000000000000000000000000         |
+| XAI-USD           | 0x5841492d55534400000000000000000000000000000000000000000000000000         |
+| XLM-USD           | 0x584c4d2d55534400000000000000000000000000000000000000000000000000         |
+| XMR-USD           | 0x584d522d55534400000000000000000000000000000000000000000000000000         |
+| XRP-USD           | 0x5852502d55534400000000000000000000000000000000000000000000000000         |
+| XTZ-USD           | 0x58545a2d55534400000000000000000000000000000000000000000000000000         |
+| YFI-USD           | 0x5946492d55534400000000000000000000000000000000000000000000000000         |
+| ZEC-USD           | 0x5a45432d55534400000000000000000000000000000000000000000000000000         |
+| ZETA-USD          | 0x5a4554412d555344000000000000000000000000000000000000000000000000         |
+## Runescape Feeds
+
+We thought it would be fun to include some Runescape items in the Molten Oracle. Below is a list of Runescape items and their corresponding bytes32 representations.
+| Feed          | Bytes32 Conversion                                                         |
+|---------------|----------------------------------------------------------------------------|
+| TWISTEDBOW-GP     | 0x54574953544544424f572d475000000000000000000000000000000000000000     |
+| ABYSSALWHIP-GP    | 0x4142595353414c574849502d4750000000000000000000000000000000000000     |
+| OSBOND-GP         | 0x4f53424f4e442d47500000000000000000000000000000000000000000000000     |
+| BLOODRUNE-GP      | 0x424c4f4f4452554e452d47500000000000000000000000000000000000000000     |
+| NIGHTMARESTAFF-GP | 0x4e494748544d41524553544146462d4750000000000000000000000000000000     |
